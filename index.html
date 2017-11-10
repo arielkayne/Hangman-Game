@@ -1,234 +1,265 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ari's Hangman
-    <meta charset="utf-8">
-    </title>
+    <title>Ari's Hangman</title>
+      <meta charset="utf-8">
+      <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+      <link rel="stylesheet" type="text/css" href="assets/css/style.css">
   </head>
   <body>
     <!-- #game" will be replaced by script which calls for var html -->
-    <div id="game">
-      <p>Press Enter key to get started...</p>
-    </div>
-    <script type="text/javascript">
-    //establish my initial vars
-    var wordBank = ["SUSHI", "SUMO", "HADOUKEN", "TOFU", "BANZAI", "KAMIKAZE", "YAKUZA", "TOKYO", "TAMAGOCHI"];
-    var unusedLetters = ["A", "B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
-    var wins = 0;
-    var losses = 0;
-    var guesses = 10;
-    // randomly selected word from array
-    var currentWord;
-    // current word as an array of letters
-    var currentArray = [];
-    //generate default array for current word
-    var currentDefaultArray = [];
-    // generally, uppercase version of key that was pressed
-    var guessLetter;
-    // array of valid guessed letters
-    var usedLetters = [];
-    // used as a way to refresh displayed html on id #game
-    var html;
-    //part of logic to determine if game has started for key press if statements
-    var gameStatus = false;
-    //used as array index of selected array
-    var currentIndex = 0;
-    var currentIndexes = [];
-    // string of underscores
-    var displayArray;
+    <div class="container">
+      <div class="gameBox">
+        <img src="assets/images/Japanese_Game_Show_SNL.jpg" alt="game show image">
+      </div>
 
-    randomWord();
+      <div id="game">
+         <br>
+         <p>Press Enter key to get started...</p>
+      </div>
 
-    console.log ("This is your randomly selected word: " + currentWord);
-    console.log ("----------------------------------------------");
 
-    // This function is run whenever the user presses a key and sets guess letter
-    document.onkeyup = function(event) {
-      guessLetter = event.key;
-      console.log ("This is the letter that was just pressed: " + guessLetter);
 
-// if the game hasn't started yet, run this if/else statement...
-      if (gameStatus === false){
-        if (guessLetter === "Enter") {
-          // setting a variable to hold our new HTML. Our HTML now keeps track of the user and computer guesses, and wins/losses/guesses rem.
-          gameStatus = true;
-          html =
-            "<p>The computer has selected: " + currentWord + "</p>" +
-            "<p>wins: " + wins + "</p>" +
-            "<p>losses: " + losses + "</p>" +
-            "<p>You typed: " + guessLetter + "</p>" +
-            "<p>guesses remaining: " + guesses + "</p>" +
-            "<br><br>" +
-            "<p>Your word progress: </p>" + currentArray.join("")+
-            "<br><br>" + 
-            "<p>Your letter bank: " + unusedLetters;
-          // Set the inner HTML contents of the #game div to our html string
-          document.querySelector("#game").innerHTML = html;
-          console.log ("you should currently be gameStatus true...your status is:" + gameStatus);
-          console.log ("--------------------wait for next keypress--------------------------");
+      <script type="text/javascript">
+      //establish my initial vars
+      var wordBank = ["SUSHI", "SUMO", "HADOUKEN", "TOFU", "BANZAI", "KAMIKAZE", "YAKUZA", "TOKYO", "TAMAGOCHI"];
+      var unusedLetters = ["A", "B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
+      var wins = 0;
+      var losses = 0;
+      var guesses = 10;
+      // randomly selected word from array
+      var currentWord;
+      // current word as an array of letters
+      var currentArray = [];
+      //generate default array for current word
+      var currentDefaultArray = [];
+      // generally, uppercase version of key that was pressed
+      var guessLetter;
+      // array of valid guessed letters
+      var usedLetters = [];
+      // used as a way to refresh displayed html on id #game
+      var html;
+      //part of logic to determine if game has started for key press if statements
+      var gameStatus = false;
+      //used as array index of selected array
+      var currentIndex = 0;
+      var currentIndexes = [];
+      // string of underscores
+      var displayArray;
+      var pressContinueL = "";
+      var pressContinueW = "";
+
+      randomWord();
+
+      console.log ("This is your randomly selected word: " + currentWord);
+      console.log ("----------------------------------------------");
+
+      // This function is run whenever the user presses a key and sets guess letter
+      document.onkeyup = function(event) {
+        guessLetter = event.key;
+        console.log ("This is the letter that was just pressed: " + guessLetter);
+        pressContinueL = "";
+        pressContinueW = "";
+
+  // if the game hasn't started yet, run this if/else statement...
+        if (gameStatus === false){
+          if (guessLetter === "Enter") {
+            // setting a variable to hold our new HTML. Our HTML now keeps track of the user and computer guesses, and wins/losses/guesses rem.
+            gameStatus = true;
+            html =
+              "<br>"+
+              "<p>Welcome to the Japanese Hangman Project</p>" +
+              "<p>Wins: " + wins + "</p>" +
+              "<p>Losses: " + losses + "</p>" +
+              "<br><br>" +
+              "<p>Guesses remaining: " + guesses + "</p>" +
+              "<br><br>" +
+              "<p>Your word progress (blanks are letters you haven't guessed): </p>" + currentArray.join("")+
+              "<br><br>" + 
+              "<p>Your remaining letter bank: " + unusedLetters;
+            // Set the inner HTML contents of the #game div to our html string
+            document.querySelector("#game").innerHTML = html;
+            console.log ("you should currently be gameStatus true...your status is:" + gameStatus);
+            console.log ("--------------------wait for next keypress--------------------------");
+          }
+          else {
+            html = "<br><p> You didn't hit the Enter key...hit the Enter key to start.</p>";
+            document.querySelector("#game").innerHTML = html;
+            console.log ("you should currently be gameStatus false...your status is:" + gameStatus);
+            console.log ("--------------------wait for next keypress--------------------------");
+          }
         }
+
+  // this else loop should run the actual hanging of the man
         else {
-          html = "<p> You didn't hit the Enter key...hit the Enter key to start.</p>";
-          document.querySelector("#game").innerHTML = html;
-          console.log ("you should currently be gameStatus false...your status is:" + gameStatus);
-          console.log ("--------------------wait for next keypress--------------------------");
+          console.log ("--------------------run some game logic...below:?------------------------");
+
+          if (unusedLetters.some(letterCheck)) {
+            console.log ("you guessed an available letter");
+
+            //changes letter to uppercase
+            guessLetter = guessLetter.toUpperCase();
+            console.log ("your uppercase letter is: " + guessLetter);
+
+
+            // removes element from the index #
+            unusedLetters.splice(unusedLetters.indexOf(guessLetter), 1);
+
+            //adds used letter to used letter array
+            usedLetters.push (guessLetter); 
+            
+            //need to update current array and current answer
+            // if in word, 
+            //decrease guess count by one if incorrect
+            
+
+            getAllIndexes();
+
+            replaceLetters();
+
+            compareArrays();
+
+
+            // refreshes displayed html
+            html =
+              "<br>"+
+              "<p>You're in a Japanese Gameshow</p>" +
+              "<p>Wins: " + wins + "</p>" +
+              "<p>Losses: " + losses + "</p>" +
+              "<br><p>You just typed: " + guessLetter + "</p>" +
+              "<p>Guesses remaining: " + guesses + "</p>" +
+              "<br><br>" + 
+              "<p>Your word progress (blanks are letters you haven't guessed): </p>" + currentArray.join("") + 
+              "<br><br>" + 
+              "<p>Your remaining letter bank: " + unusedLetters +
+              "<br><br>" + 
+              "Your already guessed letters: " + usedLetters +
+              "<br><br><br><strong>" + pressContinueL + pressContinueW + "</Strong>";
+            document.querySelector("#game").innerHTML = html;
+
+          }
+          else  {
+            guessLetter = guessLetter.toUpperCase();
+            console.log ("Try a different letter");
+             html =
+              "<br>"+
+              "<p>You're in a Japanese Gameshow</p>" +
+              "<p>Wins: " + wins + "</p>" +
+              "<p>Losses: " + losses + "</p>" +
+              "<br><p>You just typed: " + guessLetter + "</p>" +
+              "<p>Guesses remaining: " + guesses + "</p>" +
+              "<br><br>" + 
+              "<p>Your word progress (blanks are letters you haven't guessed): </p>" + currentArray.join("") +
+              "<br><br>" + 
+              "<p>Your remaining letter bank: " + unusedLetters +
+              "<br><br>"+ 
+              "Your already guessed letters: " + usedLetters + 
+              "<br>" +
+              "<p>You've already tried that letter or have entered something invalid, pleast try again.</p>";
+            document.querySelector("#game").innerHTML = html;
+          }
         }
       }
 
-// this else loop should run the actual hanging of the man
-      else {
-        console.log ("--------------------run some game logic...below:?------------------------");
-
-        if (unusedLetters.some(letterCheck)) {
-          console.log ("you guessed an available letter");
-
-          //changes letter to uppercase
-          guessLetter = guessLetter.toUpperCase();
-          console.log ("your uppercase letter is: " + guessLetter);
-
-
-          // removes element from the index #
-          unusedLetters.splice(unusedLetters.indexOf(guessLetter), 1);
-
-          //adds used letter to used letter array
-          usedLetters.push (guessLetter); 
-          
-          //need to update current array and current answer
-          // if in word, 
-          //decrease guess count by one if incorrect
-          
-
-          getAllIndexes();
-
-          replaceLetters();
-
-          compareArrays();
-
-
-          // refreshes displayed html
-          html =
-            "<p>The computer has selected: " + currentWord + "</p>" +
-            "<p>wins: " + wins + "</p>" +
-            "<p>losses: " + losses + "</p>" +
-            "<p>You typed: " + guessLetter + "</p>" +
-            "<p>guesses remaining: " + guesses + "</p>" +
-            "<br><br>" + 
-            "<p>Your word progress: </p>" + currentArray.join("") + 
-            "<br><br>" + 
-            "<p>Your letter bank: " + unusedLetters +
-            "<br><br>" + 
-            "Your used letters: " + usedLetters;
-          document.querySelector("#game").innerHTML = html;
-
-        }
-        else  {
-          guessLetter = guessLetter.toUpperCase();
-          console.log ("Try a different letter");
-           html =
-            "<p>The computer has selected: " + currentWord + "</p>" +
-            "<p>wins: " + wins + "</p>" +
-            "<p>losses: " + losses + "</p>" +
-            "<p>You typed: " + guessLetter + "</p>" +
-            "<p>guesses remaining: " + guesses + "</p>" +
-            "<br><br>" + 
-            "<p>Your word progress: </p>" + currentArray.join("") +
-            "<br><br>" + 
-            "<p>Your letter bank: " + unusedLetters +
-            "<br><br>"+ 
-            "Your used letters: " + usedLetters + 
-            "<br>" +
-            "<p>You've already tried that letter or have entered something invalid, pleast try again.</p>";
-          document.querySelector("#game").innerHTML = html;
-        }
-      }
-    }
-
-// choose word from wordBank array, assign to currentWord var
-    function randomWord() {
-      currentWord = wordBank [Math.floor(Math.random() * wordBank.length)];
-      currentDefaultArray = currentWord.split("");
-      console.log(currentDefaultArray);
-
-      currentArray = currentDefaultArray;
-
-      for (j=0; j < currentArray.length; j++) {
-        currentArray[j] = " _ ";
-      }
-      console.log(currentArray);
-      currentDefaultArray = currentWord.split("");
-      console.log(currentDefaultArray);
-      console.log ("--------------------just ran randomWord function--------------------------");
-    }
-
-// check letters if they exist in array as uppercase
-    function letterCheck(element) {
-      return (element === guessLetter.toUpperCase());
-      guessLetter = guessLetter.toUpperCase();
-      console.log ("--------------------just ran letterCheck function--------------------------");
-    }
-
-    // listen for keyboard input,if key pressed, check if already guessed, currentWord.charAt() if true, function (unhideLetter), else output to usedLetters[]
-    // take currentWord and display it on screen...hide letters and display underlines
-
-
-    function getAllIndexes() {
-      currentIndexes = [];
-      console.log("current array length is: " +currentDefaultArray.length);
-      for(i = 0; i < currentDefaultArray.length; i++){
-        if (currentDefaultArray[i] === guessLetter) {
-          currentIndexes.push(i);
-        }
-        else {
-        }
-      }
-      return currentIndexes;
-    }
-
-    function replaceLetters() {
-      console.log("this is the current word: " + currentWord + " Your current array: " + currentArray);
-      console.log("your guess letter is: " +guessLetter);
-      newIndex=currentWord.indexOf(guessLetter);
-      if (newIndex >= 0) {
-        console.log("your calculated new index is: " +newIndex);
-        for (i=0; i < currentIndexes.length; i++) {
-          currentArray.splice(currentIndexes[i],1,guessLetter);
-        } 
+  // choose word from wordBank array, assign to currentWord var
+      function randomWord() {
+        currentWord = wordBank [Math.floor(Math.random() * wordBank.length)];
+        currentDefaultArray = currentWord.split("");
         console.log(currentDefaultArray);
+
+        currentArray = currentDefaultArray;
+
+        for (j=0; j < currentArray.length; j++) {
+          currentArray[j] = " _ ";
+        }
         console.log(currentArray);
-        console.log ("--------------------just ran replaceLetters function--------------------------");
+        currentDefaultArray = currentWord.split("");
+        console.log(currentDefaultArray);
+        console.log ("--------------------just ran randomWord function--------------------------");
       }
-      else {
-        console.log("your calculated new index is: N/A...wrong entry");
-        guesses = guesses - 1;
-        didYouLose();
-      }
-    }
 
-    function compareArrays() {
-      console.log ("testing to see if you won");
-      var one = currentArray.join("");
-      var two = currentDefaultArray.join("");
-      if (one === two) {
-        wins = wins + 1;
-        console.log ("you won a game");
+  // check letters if they exist in array as uppercase
+      function letterCheck(element) {
+        return (element === guessLetter.toUpperCase());
+        guessLetter = guessLetter.toUpperCase();
+        console.log ("--------------------just ran letterCheck function--------------------------");
       }
-      else {
-        console.log ("you didn't yet");
-      }
-    }
 
-    function didYouLose () {
-      console.log("checking if you lost yet");
-      if (guesses > 0) {
-        console.log("nope, keep guessing");
-      } 
-      else {
-        console.log("yep you lost");
-        losses = losses + 1;
+      // listen for keyboard input,if key pressed, check if already guessed, currentWord.charAt() if true, function (unhideLetter), else output to usedLetters[]
+      // take currentWord and display it on screen...hide letters and display underlines
+
+
+      function getAllIndexes() {
+        currentIndexes = [];
+        console.log("current array length is: " +currentDefaultArray.length);
+        for(i = 0; i < currentDefaultArray.length; i++){
+          if (currentDefaultArray[i] === guessLetter) {
+            currentIndexes.push(i);
+          }
+          else {
+          }
+        }
+        return currentIndexes;
       }
-    }
-  
-    </script>
+
+      function replaceLetters() {
+        console.log("this is the current word: " + currentWord + " Your current array: " + currentArray);
+        console.log("your guess letter is: " +guessLetter);
+        newIndex=currentWord.indexOf(guessLetter);
+        if (newIndex >= 0) {
+          console.log("your calculated new index is: " +newIndex);
+          for (i=0; i < currentIndexes.length; i++) {
+            currentArray.splice(currentIndexes[i],1,guessLetter);
+          } 
+          console.log(currentDefaultArray);
+          console.log(currentArray);
+          console.log ("--------------------just ran replaceLetters function--------------------------");
+        }
+        else {
+          console.log("your calculated new index is: N/A...wrong entry");
+          guesses = guesses - 1;
+          didYouLose();
+        }
+      }
+
+      function compareArrays() {
+        console.log ("testing to see if you won");
+        var one = currentArray.join("");
+        var two = currentDefaultArray.join("");
+        if (one === two) {
+          wins = wins + 1;
+          console.log ("you won a game");
+          pressContinueW = "You won! Guess your next letter to continue...";
+          guesses = 10;
+          usedLetters = [];
+          unusedLetters = unusedLetters = ["A", "B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+          randomWord();
+
+        }
+        else {
+          console.log ("you didn't yet");
+        }
+      }
+
+      function didYouLose () {
+        console.log("checking if you lost yet");
+        if (guesses > 0) {
+          console.log("nope, keep guessing");
+        } 
+        else {
+          console.log("Yep, you lost.");
+          losses = losses + 1;
+          guesses = 10;
+          pressContinueL = "You lost! Guess your next letter to continue...";
+          usedLetters = [];
+          unusedLetters = unusedLetters = ["A", "B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+          randomWord();
+
+        }
+      }
+    
+      </script>
+    </div>  
   </body>
 </html>
 <!-- 1. [Watch the demo](hangman-game-demo.mov).
@@ -243,36 +274,13 @@ jpop
 7. Number of Guesses Remaining: (# of guesses remaining for the user).
 8. Letters Already Guessed: (Letters the user has guessed, displayed like `L Z Y H`).
 9. After the user wins/loses the game should automatically choose another word and make the user play it.
+
 ##### Hangman Game Bonuses
 1. Play a sound or song when the user guesses their word correctly, like in our demo.
+
 2. Write some stylish CSS rules to make a design that fits your game's theme.
 3. **HARD MODE:** Organize your game code as an object, except for the key events to get the letter guessed. This will be a challenge if you haven't coded with JavaScript before, but we encourage anyone already familiar with the language to try this out.
 4. Save your whole game and its properties in an object.
 5. Save any of your game's functions as methods, and call them underneath your object declaration using event listeners.
 6. Don't forget to place your global variables and functions above your object.
 * Remember: global variables, then objects, then calls.
-7. Definitely talk with a TA or your instructor if you get tripped up during this challenge.
-- - -
-#### A Few Tips
-1. **IMPORTANT:** Whichever assignment you choose, code your game one piece at a time! Code all of your apps one piece at a time. _Always code one piece at a time!_
-2. Pseudocode your program and break the app down into tiny, manageable fragments. This will make the coding process much less frustrating and a veritable Mach number faster. Otherwise, you'll be chipping away at a giant chunk of abstraction for way too many hours.
-* The ability to solve a large problem by treating it as a set of smaller ones is the hallmark of a strong programmer. Best start adapting this into your development routine now, to better prepare for your more complex future projects.
-* Remember:
-1. Split the whole program into many distinct, pseudocoded problems.
-2. Focus on one of the smaller problems and solve it.
-3. Only when you solve one problem should you then move onto your next problem.
-3. When you encounter bugs (and we all do), `console.log` will become your best friend. Regularly check your console to make sure your app is spitting out the right values.
-* As a more advanced—but more powerful—alternative, feel free to experiment with the [Chrome DevTools Debugger](https://developers.google.com/web/tools/chrome-devtools/).
-4. Try your best to deliver a 'working/playable game' by the end of the deadline. If you're not making progress with Hangman, switch gears to the Psychic game. Contact your TA/Instructor if you're not making progress after 2 hours. We're here to help!
-5. Substance over style! Submitting a working game matters more that making a broken app that at least looks pretty. We're focusing on game mechanics, not just on the look and feel of your app.
-6. That said, coding a functional app that also looks pretty would be impressive.
-7. Always commit your work and back it up with GitHub pushes. You don't want to lose hours of your work because you didn't push it to GitHub every half hour or so.
-* **Commit often**.
-8. Turn in anything you have! Even if you don't finish, we still want to see what you were able to accomplish in the time we gave you. This will help us know what concepts we could help you with, as well as what topics we should focus on in the coming lectures.
-- - -
-### Minimum Requirements
-Attempt to complete homework assignment as described in instructions. If unable to complete certain portions, please pseudocode these portions to describe what remains to be completed.
-- - -
-### One More Thing
-If you have any questions about this project or the material we have covered, please post them in the community channels in slack so that your fellow developers can help you! If you're still having trouble, you can come to office hours for assistance from your instructor and TAs.
-**Good Luck!** -->
