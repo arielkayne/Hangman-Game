@@ -8,6 +8,13 @@
   </head>
   <body>
     <!-- #game" will be replaced by script which calls for var html -->
+    <audio id="soundWin" src="assets/sounds/270333__littlerobotsoundfactory__jingle-win-00.wav"></audio>
+    <audio id="soundMiss" src="assets/sounds/323211__yugi16dm__no-iie.mp3"></audio> 
+    <audio id="soundLose" src="assets/sounds/235154__reitanna__japanese-no-way.wav"></audio>
+    <audio id="soundCorrect" src="assets/sounds/235011__reitanna__japanese-yes5.wav"></audio>
+    <audio id="soundStart" src="assets/sounds/234907__kloudkicker1__kabuki.wav"></audio>
+
+
     <div class="container">
       <div class="gameBox">
         <img src="assets/images/Japanese_Game_Show_SNL.jpg" alt="game show image">
@@ -65,6 +72,7 @@
         if (gameStatus === false){
           if (guessLetter === "Enter") {
             // setting a variable to hold our new HTML. Our HTML now keeps track of the user and computer guesses, and wins/losses/guesses rem.
+            playStart();
             gameStatus = true;
             html =
               "<br>"+
@@ -211,6 +219,7 @@
           for (i=0; i < currentIndexes.length; i++) {
             currentArray.splice(currentIndexes[i],1,guessLetter);
           } 
+          playCorrect();
           console.log(currentDefaultArray);
           console.log(currentArray);
           console.log ("--------------------just ran replaceLetters function--------------------------");
@@ -218,6 +227,7 @@
         else {
           console.log("your calculated new index is: N/A...wrong entry");
           guesses = guesses - 1;
+          playMiss();
           didYouLose();
         }
       }
@@ -230,6 +240,7 @@
           wins = wins + 1;
           console.log ("you won a game");
           pressContinueW = "You won! Guess your next letter to continue...";
+          playWin();
           guesses = 10;
           usedLetters = [];
           unusedLetters = unusedLetters = ["A", "B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
@@ -249,6 +260,7 @@
         else {
           console.log("Yep, you lost.");
           losses = losses + 1;
+          playLose();
           guesses = 10;
           pressContinueL = "You lost! Guess your next letter to continue...";
           window.open('http://www.latlmes.com/world/your-sensational-news-article-headline-1');
@@ -258,7 +270,27 @@
 
         }
       }
-    
+
+    function playWin(){
+     var audio = document.getElementById("soundWin");
+     audio.play();
+    }
+    function playLose(){
+     var audio = document.getElementById("soundLose");
+     audio.play();
+    }    
+    function playMiss(){
+     var audio = document.getElementById("soundMiss");
+     audio.play();
+    }        
+    function playCorrect(){
+     var audio = document.getElementById("soundCorrect");
+     audio.play();
+    }
+    function playStart(){
+     var audio = document.getElementById("soundStart");
+     audio.play();
+    }
       </script>
     </div>  
   </body>
